@@ -26,35 +26,35 @@ async def answer(bot, query):
         )
 
     if results:
-        count = len(results)
-        switch_pm_text = f"{emoji.FILE_FOLDER} {count} Result{'s' if count > 1 else ''}"
+        switch_pm_text = f"{emoji.CHECK_MARK} Hasil"
         if string:
-            switch_pm_text += f" for {string}"
+            switch_pm_text += f" Untuk {string}"
 
         await query.answer(results=results,
-                           cache_time=CACHE_TIME,
+                           cache_time=cache_time,
                            switch_pm_text=switch_pm_text,
-                           switch_pm_parameter="start")
+                           switch_pm_parameter="start",
+                           next_offset=str(next_offset))
     else:
 
-        switch_pm_text = f'{emoji.CROSS_MARK} No results'
-        if string:
-            switch_pm_text += f' for "{string}"'
+        switch_pm_text = f'{emoji.CROSS_MARK} Belum ada - Silahkan Hub. Admin! (Klik disini)'
+        
+        await query.answer(results=results,
+                           cache_time=cache_time,
+                           switch_pm_text=switch_pm_text,
+                           switch_pm_parameter="invite",
+                           next_offset=str(next_offset))
 
-        await query.answer(
-            results=[],
-            cache_time=CACHE_TIME,
-            switch_pm_text=switch_pm_text,
-            switch_pm_parameter="okay")
-
-
-def get_reply_markup(username):
-    buttons = [[
-        InlineKeyboardButton('Search again', switch_inline_query_current_chat=''),
-        InlineKeyboardButton(
-            text='Share bot',
-            url='tg://msg?text='+ quote(SHARE_BUTTON_TEXT.format(username=username))),
-    ]]
+def get_reply_markup(username, query):
+    url = 'trakteer.id/ccgnimeX'
+    url1 = 't.me/share/url?url=' + quote(SHARE_BUTTON_TEXT.format(username=username))
+    buttons = [
+        [
+            InlineKeyboardButton('🔍 Cari Lagi', switch_inline_query_current_chat=query),
+            InlineKeyboardButton('📤 Share', url=url1),
+            InlineKeyboardButton('❣️Donasi', url=url),
+        ]   
+    ]
     return InlineKeyboardMarkup(buttons)
 
 
